@@ -35,19 +35,6 @@ public class FooJpaDaoTest {
 	
 	@Test
 	public void testDaoInjection() {
-		
-		Foo.Builder builder = new Foo.Builder();
-		
-		builder.setName("mike");
-		builder.setDescription("my name is");
-		builder.setId(UUID.randomUUID());
-		
-		Foo foo = builder.build();
-		
-		fooDao.create(foo);
-		
-		System.out.println(foo.getCreateDate());
-		
 		assertNotNull(fooDao);
 	}
 
