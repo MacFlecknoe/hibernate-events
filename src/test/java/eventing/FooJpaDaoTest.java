@@ -54,5 +54,6 @@ public class FooJpaDaoTest {
 		Foo retreivedFoo = fooDao.findById(foo.getId());
 		
 		assertNotNull(retreivedFoo);
+		assertNotNull(retreivedFoo.getCreateDate()); // attribute inserted by listener
 	}
 }

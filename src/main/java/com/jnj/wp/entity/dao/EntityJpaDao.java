@@ -25,20 +25,12 @@ public abstract class EntityJpaDao<T extends Entity> implements IEntityDao<T> {
 	@Transactional
 	@Override
 	public void create(T entity) {
-		
-		DateTime now = DateTime.now();
-		
-		entity.setCreateDate(now);
-		entity.setUpdateDate(now);
-		
 		entityManager.persist(entity);
 	}
 	
 	@Transactional
 	@Override
 	public T update(T entity) {
-		
-		entity.setUpdateDate(DateTime.now());
 		
 		entityManager.detach(entity);
 		T result = entityManager.merge(entity);
