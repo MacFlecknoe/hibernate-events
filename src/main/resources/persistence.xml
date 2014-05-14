@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<beans xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd 
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd 
+        http://www.springframework.org/schema/util  
+        http://www.springframework.org/schema/util/spring-util-3.1.xsd 
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<context:annotation-config />
+
+	<tx:annotation-driven transaction-manager="transactionManager" order="2" />
+		
+	<context:property-placeholder location="classpath*:/db.properties" ignore-unresolvable="true" />
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.jnj.wp.entity,com.jnj.wp.entity.dao" />
+		<property name="jpaPropertyMap" ref="jpaProperties" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="${unitedstates.hibernate.showSql}" />
+				<property name="generateDdl" value="${unitedstates.hibernate.generateDdl}" />
+				<property name="databasePlatform" value="${unitedstates.hibernate.dialect}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${unitedstates.db.connection.driver_class}" />
+		<property name="jdbcUrl" value="${unitedstates.db.connection.url}" />
+		<property name="user" value="${unitedstates.db.connection.username}" />
+		<property name="password" value="${unitedstates.db.connection.password}" />
+		<property name="acquireIncrement"
+			value="${unitedstates.db.connection.pool.acquireIncrement}" />
+		<property name="initialPoolSize"
+			value="${unitedstates.db.connection.pool.initialPoolSize}" />
+		<property name="minPoolSize"
+			value="${unitedstates.db.connection.pool.minPoolSize}" />
+		<property name="maxPoolSize"
+			value="${unitedstates.db.connection.pool.maxPoolSize}" />
+		<property name="maxIdleTime"
+			value="${unitedstates.db.connection.pool.maxIdleTime}" />
+	</bean>
+
+	<bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<util:map id="jpaProperties" key-type="java.lang.String">
+		<entry key="hibernate.hbm2ddl.auto" value="${unitedstates.hibernate.hbm2ddl.auto}" />
+		<entry key="hibernate.cache.use_second_level_cache" value="${unitedstates.hibernate.cache.use_second_level_cache}" />
+		<entry key="hibernate.cache.use_query_cache" value="${unitedstates.hibernate.cache.use_query_cache}" />
+		<entry key="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+		<entry key="sql.syntax_ora" value="true" />
+		<entry key="hibernate.default_schema" value="${unitedstates.hibernate.default_schema}" />
+		<entry key="org.hibernate.envers.default_schema" value="${unitedstates.hibernate.envers.defaultSchema}" />
+		<entry key="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />
+		<entry key="org.hibernate.envers.revision_type_field_name" value="${unitedstates.hibernate.envers.revision_type_field_name}" />
+		<entry key="org.hibernate.envers.do_not_audit_optimistic_locking_field" value="false" />
+		<entry key="org.hibernate.envers.store_data_at_delete" value="true" />
+	</util:map>
+
+	<!-- daos -->
+	<bean id="fooDao" class="com.jnj.wp.entity.dao.FooJpaDao">
+		<constructor-arg>
+			<ref bean="entityManager" />
+		</constructor-arg>
+	</bean>
+	<!--// daos -->
+	
+	<bean class="com.jnj.wp.entity.dao.EntityDaoRegistry">
+		<constructor-arg>
+			<map>
+				<entry key="com.jnj.wp.entity.Foo" value-ref="fooDao" />
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>
