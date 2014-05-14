@@ -20,6 +20,10 @@ public abstract class EntityJpaDao<T extends Entity> implements IEntityDao<T> {
 	public EntityJpaDao(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+	
+	protected EntityManager getEntityManager() {
+		return this.entityManager;
+	}
 
 	@Transactional
 	@Override
@@ -42,10 +46,6 @@ public abstract class EntityJpaDao<T extends Entity> implements IEntityDao<T> {
 	@Override
 	public void delete(T entity) {
 		entityManager.remove(entity);
-	}
-	
-	protected EntityManager getEntityManager() {
-		return this.entityManager;
 	}
 	
 	public abstract T findById(UUID id);
