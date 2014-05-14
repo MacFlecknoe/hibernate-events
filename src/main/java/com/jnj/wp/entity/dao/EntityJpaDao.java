@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 
-import org.joda.time.DateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jnj.wp.entity.Entity;
@@ -45,7 +44,7 @@ public abstract class EntityJpaDao<T extends Entity> implements IEntityDao<T> {
 		entityManager.remove(entity);
 	}
 	
-	public EntityManager getEntityManager() {
+	protected EntityManager getEntityManager() {
 		return this.entityManager;
 	}
 	
