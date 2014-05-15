@@ -1,6 +1,13 @@
 package com.jnj.wp.entity;
 
+import java.util.Set;
 import java.util.UUID;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -38,6 +45,7 @@ public class Foo extends Entity {
 		private DateTime createDate;
 		private DateTime updateDate;
 		
+		@NotNull(message="{com.jnj.wp.entity.foo.id.notNull.message}")
 		public UUID getId() {
 			return id;
 		}
@@ -47,6 +55,7 @@ public class Foo extends Entity {
 			return this;
 		}
 		
+		@NotNull(message="{com.jnj.wp.entity.foo.name.notNull.message}")
 		public String getName() {
 			return name;
 		}
@@ -64,7 +73,7 @@ public class Foo extends Entity {
 			this.description = description;
 			return this;
 		}
-
+		
 		public int getVersion() {
 			return version;
 		}
@@ -94,7 +103,14 @@ public class Foo extends Entity {
 			return this;
 		}
 		
-		public Foo build() {
+		public Foo build() throws ConstraintViolationException {
+			
+			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+			Set<ConstraintViolation<Foo.Builder>> violations = factory.getValidator().validate(this);
+			 
+			if(!violations.isEmpty()) {
+				throw new ConstraintViolationException(violations);
+			}
 			return new Foo(this);
 		}
 	}

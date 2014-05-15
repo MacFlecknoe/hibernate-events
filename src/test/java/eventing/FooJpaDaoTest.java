@@ -37,6 +37,15 @@ public class FooJpaDaoTest {
 	public void testDaoInjection() {
 		assertNotNull(fooDao);
 	}
+	
+	@Test(expected = javax.validation.ConstraintViolationException.class)
+	public void testFooBuildFailure() {
+		
+		Foo.Builder builder = new Foo.Builder();
+		
+		builder.setId(UUID.randomUUID());
+		builder.build();
+	}
 
 	@Test
 	public void testFooCreate() {
