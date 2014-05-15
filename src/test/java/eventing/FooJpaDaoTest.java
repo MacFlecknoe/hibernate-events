@@ -58,6 +58,8 @@ public class FooJpaDaoTest {
 		
 		Foo foo = builder.build();
 		
+		assertNull(foo.getCreateDate()); // nothing up my sleeve
+		
 		foo.create();
 		
 		Foo retreivedFoo = fooDao.findById(foo.getId());
