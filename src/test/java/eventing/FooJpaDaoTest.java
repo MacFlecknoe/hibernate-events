@@ -2,14 +2,9 @@ package eventing;
 
 import static org.junit.Assert.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
-
-import org.joda.time.DateTime;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +48,7 @@ public class FooJpaDaoTest {
 		Foo.Builder builder = new Foo.Builder();
 		
 		builder.setName("mike");
-		builder.setDescription("my name is");
+		builder.setDescription("my name is michael lambert");
 		builder.setId(UUID.randomUUID());
 		
 		Foo foo = builder.build();
