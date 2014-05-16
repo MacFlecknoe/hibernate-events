@@ -39,7 +39,7 @@ public class FooJpaDaoTest {
 	}
 
 	@Test
-	public void testFooCreate() {
+	public void testEntityDateListener() {
 		
 		Foo.Builder builder = new Foo.Builder();
 		
